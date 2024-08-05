@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'data/repository/car_repository.dart';
+import 'presentation/cubit/car_cubit.dart';
 import 'presentation/screens/car_list_screen.dart';
 
 void main() {
@@ -8,7 +9,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final CarRepository carRepository = CarRepository(apiUrl: 'https://your-api-url.com');
+  final CarRepository carRepository = CarRepository(apiUrl: 'https://bun0kdtj9i.execute-api.us-east-1.amazonaws.com/Prod');
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +17,19 @@ class MyApp extends StatelessWidget {
       providers: [
         RepositoryProvider.value(value: carRepository),
       ],
-      child: MaterialApp(
-        title: 'Car CRUD App',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => CarCubit(carRepository: carRepository),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Car CRUD App',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const CarListScreen(),
         ),
-        home: const CarListScreen(),
       ),
     );
   }

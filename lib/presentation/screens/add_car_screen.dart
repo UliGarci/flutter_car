@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/car_cubit.dart';
@@ -68,7 +70,7 @@ class AddCarScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     final newCar = CarModel(
                       nombre: _nombreController.text,
@@ -76,8 +78,22 @@ class AddCarScreen extends StatelessWidget {
                       potencia: int.parse(_potenciaController.text),
                       capacidad: int.parse(_capacidadController.text),
                     );
-                    BlocProvider.of<CarCubit>(context).createCar(newCar);
-                    Navigator.pop(context);
+
+                    try {
+                      final response = await http.post(
+                        Uri.parse(
+                            'https://bun0kdtj9i.execute-api.us-east-1.amazonaws.com/Prod/car'),
+                        headers: {'Content-Type': 'application/json'},
+                        body: jsonEncode(newCar.toJson()..remove('id')),
+                      );
+                      if (response.statusCode == 200) {
+                        Navigator.pop(context);
+                      } else {
+                        print('Error: ${response.body}');
+                      }
+                    } catch (e) {
+                      print('Error creating car: $e');
+                    }
                   }
                 },
                 child: const Text('Add Car'),

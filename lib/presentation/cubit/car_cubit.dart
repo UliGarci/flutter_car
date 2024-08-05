@@ -11,8 +11,11 @@ class CarCubit extends Cubit<CarState> {
   Future<void> createCar(CarModel car) async {
     try {
       emit(CarLoading());
+      print('antes del await');
       await carRepository.createCar(car);
+      print('asd');
       final cars = await carRepository.getAllCars();
+      print(cars);
       emit(CarSuccess(cars: cars));
     } catch (e) {
       emit(CarError(message: e.toString()));
