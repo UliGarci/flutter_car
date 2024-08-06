@@ -20,7 +20,7 @@ class DeleteCarScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Are you sure you want to delete ${car.nombre}?',
+              'Estas seguro de eliminar ${car.nombre}?',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 18.0),
             ),

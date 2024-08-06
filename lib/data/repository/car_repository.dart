@@ -10,10 +10,11 @@ class CarRepository{
 
   // AGREGAR UN CARRO
   Future<void> createCar(CarModel car) async {
-    print(car);
     final response = await http.post(
       Uri.parse('$apiUrl/car'),
-      headers: {'Content-Type': 'application/json;'},
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: jsonEncode(car.toJson()..remove('id')),
     );
 
